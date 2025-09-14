@@ -18,8 +18,7 @@ export function setupListings() {
 
     listings.forEach((listing) => {
       const col = document.createElement("div");
-      col.className = "col-12 col-sm-6 col-md-4 col-lg-3 d-flex";
- // Bootstrap grid
+      col.className = "col-12 col-md-6 col-lg-4"; // Bootstrap grid
 
       col.innerHTML = `
         <div class="card h-100 shadow-sm">
