@@ -1,6 +1,6 @@
 // auth.mjs
 import { registerUser, loginUser } from "./api.mjs";
-import { fetchListings } from "./api.mjs";
+import { renderListings } from "./listings.mjs"; // <-- bruk renderListings
 import { showAlert } from "./ui.mjs";
 
 export function setupAuth() {
@@ -56,11 +56,10 @@ export function setupAuth() {
       navbar.style.display = "flex";
       listingsSection.style.display = "block";
 
-      // Hent auksjoner når man er logget inn
-      const listings = await fetchListings();
-      console.log("Listings:", listings);
+      // Nå viser vi oppføringene i UI-et
+      await renderListings();
     } else {
-      showAlert("Innlogging feilet. Sjekk brukernavn og passord.", "danger");
+      showAlert(" Innlogging feilet. Sjekk brukernavn og passord.", "danger");
     }
   });
 
@@ -70,6 +69,6 @@ export function setupAuth() {
     navbar.style.display = "none";
     listingsSection.style.display = "none";
     loginSection.style.display = "block";
-    showAlert("ℹDu er logget ut.", "info");
+    showAlert("ℹ️ Du er logget ut.", "info");
   });
 }

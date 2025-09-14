@@ -142,27 +142,27 @@ form button:hover {
 /* ===== Bid Section ===== */
 .bid-section {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
-  margin: auto 1rem 1rem;
+  margin-top: 1rem;
 }
 
 .bid-section input {
   flex: 1;
+  height: 40px;
   padding: 0.5rem;
+  font-size: 0.95rem;
   border: 1px solid #ccc;
   border-radius: 6px;
-  font-size: 0.9rem;
 }
 
 .bid-section button {
-  background: #28a745;
-  border: none;
-  color: white;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
+  height: 40px;
+  white-space: nowrap;
+  padding: 0 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
   border-radius: 6px;
-  font-weight: bold;
-  font-size: 0.9rem;
 }
 
 .bid-section button:hover {
