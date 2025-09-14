@@ -20,7 +20,7 @@ export function setupCreateListing() {
 
     // Validering
     if (!title || !endsAt) {
-      showAlert("⚠️ Tittel og sluttdato er påkrevd!", "danger");
+      showAlert("Tittel og sluttdato er påkrevd!", "danger");
       return;
     }
 
@@ -28,11 +28,11 @@ export function setupCreateListing() {
     const endsAtDate = new Date(endsAt);
 
     if (isNaN(endsAtDate.getTime())) {
-      showAlert("⚠️ Ugyldig datoformat.", "danger");
+      showAlert("Ugyldig datoformat.", "danger");
       return;
     }
     if (endsAtDate <= new Date()) {
-      showAlert("⚠️ Sluttdato må være i fremtiden!", "danger");
+      showAlert("Sluttdato må være i fremtiden!", "danger");
       return;
     }
 
@@ -46,7 +46,7 @@ export function setupCreateListing() {
         media = [{ url: imageInput, alt: title }];
       }
     } catch {
-      showAlert("⚠️ Ugyldig bilde-URL. Oppføringen blir lagret uten bilde.", "warning");
+      showAlert(" Ugyldig bilde-URL. Oppføringen blir lagret uten bilde.", "warning");
     }
 
 // Bygg payload
@@ -69,7 +69,7 @@ if (imageInput && (imageInput.endsWith(".jpg") || imageInput.endsWith(".jpeg") |
     const result = await createListing(data);
 
     if (result) {
-      showAlert("✅ Ny oppføring opprettet!", "success");
+      showAlert("Ny oppføring opprettet!", "success");
       createForm.reset();
 
       // Bytt tilbake til alle oppføringer
@@ -79,7 +79,7 @@ if (imageInput && (imageInput.endsWith(".jpg") || imageInput.endsWith(".jpeg") |
       // Oppdater listen
       await loadListings();
     } else {
-      showAlert("❌ Kunne ikke opprette oppføring (se konsoll for detaljer).", "danger");
+      showAlert(" Kunne ikke opprette oppføring (se konsoll for detaljer).", "danger");
     }
   });
 }

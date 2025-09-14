@@ -31,7 +31,7 @@ export function setupProfile() {
     const result = await updateAvatar(userName, avatarUrl);
 
     if (result) {
-      showAlert("✅ Avatar oppdatert!", "success");
+      showAlert("Avatar oppdatert!", "success");
 
       // oppdater i navbar
       if (userAvatar) {
@@ -45,7 +45,7 @@ export function setupProfile() {
         userCredits.textContent = `Kreditt: ${profile.credits}`;
       }
     } else {
-      showAlert("❌ Kunne ikke oppdatere avatar.", "danger");
+      showAlert("Kunne ikke oppdatere avatar.", "danger");
     }
   });
 }

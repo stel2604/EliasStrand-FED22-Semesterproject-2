@@ -2,8 +2,8 @@
 import { setupAuth } from "./auth.mjs";
 import { setupListings, loadListings } from "./listings.mjs";
 import { setupCreateListing } from "./createListing.mjs";
-import { setupProfile } from "./profile.mjs"; // 👈 legg til
-import { placeBid } from "./api.mjs"; // 👈 legg til øverst
+import { setupProfile } from "./profile.mjs"; 
+import { placeBid } from "./api.mjs"; 
 
 document.addEventListener("DOMContentLoaded", async () => {
   
@@ -18,11 +18,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const registerSection = document.getElementById("register-section");
   const listingsSection = document.getElementById("listings-section");
   const createListingSection = document.getElementById("create-listing-section");
-  const profileSection = document.getElementById("profile-section"); // 👈 legg til
+  const profileSection = document.getElementById("profile-section"); 
 
   const navAll = document.getElementById("nav-all");
   const navCreate = document.getElementById("nav-create");
-  const navProfile = document.getElementById("nav-profile"); // 👈 legg til i HTML
+  const navProfile = document.getElementById("nav-profile"); 
 
   // Navigasjon: Alle oppføringer
   if (navAll) {

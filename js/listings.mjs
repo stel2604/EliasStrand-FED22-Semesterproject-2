@@ -20,14 +20,14 @@ export async function loadListings() {
 
     listingsContainer.innerHTML = "";
 
-    // 👉 Beregn aktive og avsluttede oppføringer
+    // Beregn aktive og avsluttede oppføringer
     const now = new Date();
     const activeCount = listings.filter(
       (l) => new Date(l.endsAt) > now
     ).length;
     const finishedCount = listings.length - activeCount;
 
-    // 👉 Teller for antall oppføringer
+    // Teller for antall oppføringer
     const countEl = document.createElement("h4");
     countEl.className = "mb-4 text-center";
     countEl.textContent = `Antall oppføringer: ${listings.length} (Aktive: ${activeCount}, Avsluttet: ${finishedCount})`;
@@ -102,10 +102,10 @@ export async function loadListings() {
 
         try {
           const result = await placeBid(id, amount);
-          showAlert("✅ Bud lagt inn!", "success");
+          showAlert(" Bud lagt inn!", "success");
           await loadListings(); // Oppdater listen
         } catch (err) {
-          showAlert(`❌ Kunne ikke legge inn bud: ${err.message}`, "danger");
+          showAlert(` Kunne ikke legge inn bud: ${err.message}`, "danger");
         }
       });
     });

@@ -26,13 +26,13 @@ export async function registerUser(name, email, password) {
     const data = await res.json();
 
     if (!res.ok) {
-      console.error("❌ Register error:", data);
+      console.error("Register error:", data);
       return null;
     }
 
     return data;
   } catch (err) {
-    console.error("⚠️ Register exception:", err);
+    console.error("Register exception:", err);
     return null;
   }
 }
@@ -53,7 +53,7 @@ export async function loginUser(email, password) {
     const data = await res.json();
 
     if (!res.ok) {
-      console.error("❌ Login error:", data);
+      console.error("Login error:", data);
       return null;
     }
 
@@ -63,7 +63,7 @@ export async function loginUser(email, password) {
 
     return data;
   } catch (error) {
-    console.error("⚠️ loginUser exception:", error);
+    console.error("loginUser exception:", error);
     return null;
   }
 }
@@ -81,13 +81,13 @@ export async function fetchListings() {
     const data = await res.json();
 
     if (!res.ok) {
-      console.error("❌ Fetch listings error:", data);
+      console.error("Fetch listings error:", data);
       return [];
     }
 
     return data;
   } catch (err) {
-    console.error("⚠️ Fetch listings exception:", err);
+    console.error("Fetch listings exception:", err);
     return [];
   }
 }
@@ -105,13 +105,13 @@ export async function createListing(listingData) {
     const data = await res.json();
 
     if (!res.ok) {
-      console.error("❌ Create listing error:", data.errors || data); // viser hele feilmeldingen
+      console.error("Create listing error:", data.errors || data); // viser hele feilmeldingen
       return null;
     }
 
     return data;
   } catch (err) {
-    console.error("⚠️ Create listing exception:", err);
+    console.error("Create listing exception:", err);
     return null;
   }
 }
@@ -137,7 +137,7 @@ export async function placeBid(listingId, amount) {
 
     return data;
   } catch (err) {
-    console.error("❌ placeBid failed:", err);
+    console.error("placeBid failed:", err);
     throw err; // la UI vise dette
   }
 }
