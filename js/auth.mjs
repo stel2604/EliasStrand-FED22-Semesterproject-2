@@ -38,11 +38,11 @@ export function setupAuth() {
     const result = await registerUser(name, email, password);
 
     if (result) {
-      showAlert("✅ Registrering vellykket! Du kan nå logge inn.", "success");
+      showAlert("Registrering vellykket! Du kan nå logge inn.", "success");
       registerSection.style.display = "none";
       loginSection.style.display = "block";
     } else {
-      showAlert("❌ Registrering feilet. Sjekk e-post, brukernavn eller passord.", "danger");
+      showAlert("Registrering feilet. Sjekk e-post, brukernavn eller passord.", "danger");
     }
   });
 
@@ -55,7 +55,7 @@ export function setupAuth() {
     const result = await loginUser(email, password);
 
     if (result) {
-      showAlert("✅ Innlogging vellykket!", "success");
+      showAlert(" Innlogging vellykket!", "success");
       loginSection.style.display = "none";
       registerSection.style.display = "none";
       navbar.style.display = "flex";
@@ -65,7 +65,7 @@ export function setupAuth() {
         userDisplay.textContent = result.name || "Bruker";
       }
 
-      // 👉 Hent profil (credits + avatar)
+      // Hent profil (credits + avatar)
       const profile = await fetchProfile(result.name);
       if (profile) {
         if (userCredits) {
@@ -80,7 +80,7 @@ export function setupAuth() {
       // Last inn oppføringer etter innlogging
       await loadListings();
     } else {
-      showAlert("❌ Innlogging feilet. Sjekk e-post og passord.", "danger");
+      showAlert("Innlogging feilet. Sjekk e-post og passord.", "danger");
       console.warn("Login mislyktes for:", email);
     }
   });

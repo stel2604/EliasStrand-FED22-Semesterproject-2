@@ -156,13 +156,13 @@ export async function fetchProfile(name) {
     const data = await res.json();
 
     if (!res.ok) {
-      console.error("❌ Fetch profile error:", data);
+      console.error(" Fetch profile error:", data);
       return null;
     }
 
     return data;
   } catch (err) {
-    console.error("⚠️ Fetch profile exception:", err);
+    console.error(" Fetch profile exception:", err);
     return null;
   }
 }
@@ -178,13 +178,13 @@ export async function updateAvatar(name, avatarUrl) {
     const data = await res.json();
 
     if (!res.ok) {
-      console.error("❌ Update avatar error:", data);
+      console.error(" Update avatar error:", data);
       return null;
     }
 
     return data;
   } catch (err) {
-    console.error("⚠️ Update avatar exception:", err);
+    console.error(" Update avatar exception:", err);
     return null;
   }
 }
@@ -210,7 +210,7 @@ export async function searchListings(query) {
 
     return data;
   } catch (err) {
-    console.error("⚠️ Search listings exception:", err);
+    console.error(" Search listings exception:", err);
     return [];
   }
 }

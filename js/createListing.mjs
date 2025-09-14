@@ -64,7 +64,7 @@ if (imageInput && (imageInput.endsWith(".jpg") || imageInput.endsWith(".jpeg") |
 
 
     // 🔎 Debug: Se payload før vi sender
-    console.log("📤 Oppretter ny oppføring med payload:", data);
+    console.log(" Oppretter ny oppføring med payload:", data);
 
     const result = await createListing(data);
 

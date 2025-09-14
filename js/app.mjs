@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupAuth();
   setupListings();
   setupCreateListing();
-  setupProfile(); // 👈 init profil
+  setupProfile(); 
 
   const navbar = document.getElementById("navbar");
   const loginSection = document.getElementById("login-section");
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Last oppføringer automatisk
     await loadListings();
   }
-    // ✨ Bud-håndtering
+    //  Bud-håndtering
   document.body.addEventListener("submit", async (e) => {
     if (e.target.matches(".bid-form")) {
       e.preventDefault();
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const result = await placeBid(listingId, amount);
 
       if (result) {
-        alert("✅ Budet ditt er lagt inn!");
+        alert(" Budet ditt er lagt inn!");
         await loadListings(); // oppdaterer visningen
       }
     }
