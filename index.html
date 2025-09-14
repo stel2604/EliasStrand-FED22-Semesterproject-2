@@ -21,9 +21,11 @@
   <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-primary px-3" style="display: none;">
     <h1 class="navbar-brand">Auksjonsplattform</h1>
     <div class="ms-auto d-flex gap-2">
-      <button id="show-listings-btn" class="btn btn-light">Alle oppføringer</button>
-      <button id="show-create-btn" class="btn btn-success">Ny oppføring</button>
-      <button id="logout-btn" class="btn btn-danger">Logg ut</button>
+    <button id="nav-all" class="btn btn-light">Alle oppføringer</button>
+<button id="nav-create" class="btn btn-success">Ny oppføring</button>
+<button id="nav-profile" class="btn btn-outline-light">Profil</button>
+<button id="logout-btn" class="btn btn-danger">Logg ut</button>
+
     </div>
   </nav>
 
@@ -75,6 +77,29 @@
       </form>
     </section>
   </main>
+
+  <!-- Profile Section -->
+<section id="profile-section" class="form-container card p-4 shadow-sm" style="display: none;">
+  <h2 class="mb-3">Min profil</h2>
+
+  <!-- Avatar og kredittsaldo -->
+  <div class="d-flex align-items-center mb-3">
+    <img id="user-avatar" src="" alt="Avatar" 
+         class="rounded-circle me-3" 
+         style="width:60px; height:60px; object-fit:cover; display:none;">
+    <div>
+      <span id="user-display" class="fw-bold d-block"></span>
+      <span id="user-credits" class="text-muted"></span>
+    </div>
+  </div>
+
+    <!-- Oppdater avatar -->
+  <form id="avatar-form">
+    <label for="avatar-url" class="form-label">Ny avatar-URL</label>
+    <input type="url" id="avatar-url" class="form-control mb-3" placeholder="https://..." required>
+    <button type="submit" class="btn btn-primary w-100">Oppdater avatar</button>
+  </form>
+</section>
 
   <!-- Bootstrap JS (for interaktivitet som modals osv.) -->
   <script 

@@ -1,188 +1,216 @@
 // api.mjs
-const API_BASE_URL = "https://v2.api.noroff.dev";
+export const API_BASE = "https://api.noroff.dev/api/v1/auction";
+const API_KEY = "a67c14fd-d4cd-4153-89af-28d60e25936a"; // ← din API-nøkkel
 
-// Din personlige API-nøkkel (fast verdi, hentet fra API-nøkkelverktøyet)
-const API_KEY = "f0a16bfc-5ef2-41e9-86eb-329dcd1646ec";
-
-/**
- * Henter headers for forespørsler.
- * Tar med Bearer token hvis brukeren er logget inn.
- */
-function getHeaders(authRequired = false) {
-  const headers = {
+// Hjelpefunksjon for headers
+function getHeaders(includeAuth = true) {
+  const token = localStorage.getItem("accessToken");
+  return {
     "Content-Type": "application/json",
     "X-Noroff-API-Key": API_KEY,
+    ...(includeAuth && token && { Authorization: `Bearer ${token}` }),
   };
-
-  if (authRequired) {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    }
-  }
-
-  return headers;
 }
 
-/* ======================
-   AUTH
-====================== */
+// ======================= AUTH =======================
 
-/**
- * Registrer en ny bruker
- * @param {string} name - Brukernavn (kun bokstaver, tall og _)
- * @param {string} email - E-post (må være @stud.noroff.no)
- * @param {string} password - Passord (minst 8 tegn)
- */
+// Registrer ny bruker
 export async function registerUser(name, email, password) {
   try {
-    const response = await fetch(`${API_BASE_URL}/auth/register`, {
+    const res = await fetch(`${API_BASE}/auth/register`, {
       method: "POST",
-      headers: getHeaders(),
+      headers: getHeaders(false),
       body: JSON.stringify({ name, email, password }),
     });
 
-    if (!response.ok) {
-      const error = await response.json();
-      console.error("Registreringsfeil:", error);
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("❌ Register error:", data);
       return null;
     }
 
-    const data = await response.json();
-    return data.data;
+    return data;
   } catch (err) {
-    console.error("Uventet feil ved registrering:", err);
+    console.error("⚠️ Register exception:", err);
     return null;
   }
 }
 
-/**
- * Logger inn en bruker
- * @param {string} email
- * @param {string} password
- */
+// Logg inn
+// Logg inn
 export async function loginUser(email, password) {
   try {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    const res = await fetch(`${API_BASE}/auth/login`, {
       method: "POST",
-      headers: getHeaders(),
+      headers: {
+        "Content-Type": "application/json",
+        "X-Noroff-API-Key": API_KEY,
+      },
       body: JSON.stringify({ email, password }),
     });
 
-    if (!response.ok) {
-      const error = await response.json();
-      console.error("Innloggingsfeil:", error);
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("❌ Login error:", data);
       return null;
     }
 
-    const data = await response.json();
+    // lagre token og brukernavn
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("userName", data.name);
 
-    // Lagre accessToken i localStorage
-    if (data.data && data.data.accessToken) {
-      localStorage.setItem("accessToken", data.data.accessToken);
-    }
-
-    return data.data;
-  } catch (err) {
-    console.error("Uventet feil ved innlogging:", err);
+    return data;
+  } catch (error) {
+    console.error("⚠️ loginUser exception:", error);
     return null;
   }
 }
 
-/* ======================
-   LISTINGS
-====================== */
+// ======================= LISTINGS =======================
 
-/**
- * Hent alle oppføringer
- */
+// Hent alle oppføringer
+// Hent alle oppføringer (inkludert bud og selger-info)
 export async function fetchListings() {
   try {
-    const response = await fetch(
-      `${API_BASE_URL}/auction/listings?_bids=true&_seller=true`,
-      {
-        method: "GET",
-        headers: getHeaders(),
-      }
-    );
+    const res = await fetch(`${API_BASE}/listings?_bids=true&_seller=true`, {
+      headers: getHeaders(false), // auth ikke nødvendig
+    });
 
-    if (!response.ok) {
-      console.error("Feil ved henting av listings:", response.status);
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("❌ Fetch listings error:", data);
       return [];
     }
 
-    const data = await response.json();
-    return data.data || [];
+    return data;
   } catch (err) {
-    console.error("Uventet feil ved henting av listings:", err);
+    console.error("⚠️ Fetch listings exception:", err);
     return [];
   }
 }
 
-/**
- * Opprett en ny oppføring
- */
-export async function createListing(title, description, endsAt, imageUrl = "") {
-  const listingData = {
-    title,
-    description,
-    endsAt,
-  };
 
-  if (imageUrl && imageUrl.startsWith("http")) {
-    listingData.media = [
-      {
-        url: imageUrl,
-        alt: "Listing image",
-      },
-    ];
-  }
-
+// Opprett ny oppføring
+export async function createListing(listingData) {
   try {
-    const response = await fetch(`${API_BASE_URL}/auction/listings`, {
+    const res = await fetch(`${API_BASE}/listings`, {
       method: "POST",
-      headers: getHeaders(true),
+      headers: getHeaders(),
       body: JSON.stringify(listingData),
     });
 
-    if (!response.ok) {
-      const error = await response.json();
-      console.error("Feil ved opprettelse av listing:", error);
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("❌ Create listing error:", data.errors || data); // viser hele feilmeldingen
       return null;
     }
 
-    const data = await response.json();
-    return data.data;
+    return data;
   } catch (err) {
-    console.error("Uventet feil ved opprettelse av listing:", err);
+    console.error("⚠️ Create listing exception:", err);
     return null;
   }
 }
 
-/**
- * Legg inn et bud på en oppføring
- */
+
+// Legg inn bud
+// api.mjs
 export async function placeBid(listingId, amount) {
   try {
-    const response = await fetch(
-      `${API_BASE_URL}/auction/listings/${listingId}/bids`,
-      {
-        method: "POST",
-        headers: getHeaders(true),
-        body: JSON.stringify({ amount }),
-      }
-    );
+    const res = await fetch(`${API_BASE}/listings/${listingId}/bids`, {
+      method: "POST",
+      headers: getHeaders(true),
+      body: JSON.stringify({ amount }),
+    });
 
-    if (!response.ok) {
-      const error = await response.json();
-      console.error("Feil ved bud:", error);
+    const data = await res.json();
+
+    if (!res.ok) {
+      const msg =
+        data?.errors?.[0]?.message || `${res.status} ${res.statusText}`;
+      throw new Error(msg); // <-- viktig
+    }
+
+    return data;
+  } catch (err) {
+    console.error("❌ placeBid failed:", err);
+    throw err; // la UI vise dette
+  }
+}
+
+
+
+
+// ======================= PROFILE =======================
+
+// Hent en profil (inkludert credits og avatar)
+export async function fetchProfile(name) {
+  try {
+    const res = await fetch(`${API_BASE}/profiles/${name}`, {
+      headers: getHeaders(),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("❌ Fetch profile error:", data);
       return null;
     }
 
-    const data = await response.json();
-    return data.data;
+    return data;
   } catch (err) {
-    console.error("Uventet feil ved budgivning:", err);
+    console.error("⚠️ Fetch profile exception:", err);
     return null;
+  }
+}
+
+// Oppdater avatar for innlogget bruker
+export async function updateAvatar(name, avatarUrl) {
+  try {
+    const res = await fetch(`${API_BASE}/profiles/${name}/media`, {
+      method: "PUT",
+      headers: getHeaders(),
+      body: JSON.stringify({ avatar: avatarUrl }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("❌ Update avatar error:", data);
+      return null;
+    }
+
+    return data;
+  } catch (err) {
+    console.error("⚠️ Update avatar exception:", err);
+    return null;
+  }
+}
+
+// ======================= SEARCH =======================
+
+// Søk i oppføringer
+export async function searchListings(query) {
+  try {
+    const res = await fetch(
+      `${API_BASE}/listings?_bids=true&title=${encodeURIComponent(query)}`,
+      {
+        headers: getHeaders(false), // søk kan gjøres uten login
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("❌ Search listings error:", data);
+      return [];
+    }
+
+    return data;
+  } catch (err) {
+    console.error("⚠️ Search listings exception:", err);
+    return [];
   }
 }

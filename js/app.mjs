@@ -1,35 +1,58 @@
 // app.mjs
 import { setupAuth } from "./auth.mjs";
-import { renderListings } from "./listings.mjs";
+import { setupListings, loadListings } from "./listings.mjs";
+import { setupCreateListing } from "./createListing.mjs";
+import { setupProfile } from "./profile.mjs"; // 👈 legg til
+import { placeBid } from "./api.mjs"; // 👈 legg til øverst
 
 document.addEventListener("DOMContentLoaded", async () => {
+  
+  // Init alle systemer
   setupAuth();
+  setupListings();
+  setupCreateListing();
+  setupProfile(); // 👈 init profil
 
   const navbar = document.getElementById("navbar");
   const loginSection = document.getElementById("login-section");
   const registerSection = document.getElementById("register-section");
   const listingsSection = document.getElementById("listings-section");
+  const createListingSection = document.getElementById("create-listing-section");
+  const profileSection = document.getElementById("profile-section"); // 👈 legg til
 
-  // Navigasjon
   const navAll = document.getElementById("nav-all");
   const navCreate = document.getElementById("nav-create");
+  const navProfile = document.getElementById("nav-profile"); // 👈 legg til i HTML
 
+  // Navigasjon: Alle oppføringer
   if (navAll) {
     navAll.addEventListener("click", async () => {
       listingsSection.style.display = "block";
-      document.getElementById("create-listing-section").style.display = "none";
-      await renderListings();
+      createListingSection.style.display = "none";
+      if (profileSection) profileSection.style.display = "none";
+      await loadListings();
     });
   }
 
+  // Navigasjon: Ny oppføring
   if (navCreate) {
     navCreate.addEventListener("click", () => {
       listingsSection.style.display = "none";
-      document.getElementById("create-listing-section").style.display = "block";
+      createListingSection.style.display = "block";
+      if (profileSection) profileSection.style.display = "none";
     });
   }
 
-  // 👇 Sjekk om bruker allerede er logget inn
+  // Navigasjon: Profil
+  if (navProfile) {
+    navProfile.addEventListener("click", () => {
+      listingsSection.style.display = "none";
+      createListingSection.style.display = "none";
+      if (profileSection) profileSection.style.display = "block";
+    });
+  }
+
+  // Sjekk om bruker allerede er logget inn (token i localStorage)
   const token = localStorage.getItem("accessToken");
   if (token) {
     navbar.style.display = "flex";
@@ -38,6 +61,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     listingsSection.style.display = "block";
 
     // Last oppføringer automatisk
-    await renderListings();
+    await loadListings();
   }
+    // ✨ Bud-håndtering
+  document.body.addEventListener("submit", async (e) => {
+    if (e.target.matches(".bid-form")) {
+      e.preventDefault();
+
+      const listingId = e.target.dataset.id;
+      const amount = parseInt(e.target.querySelector("input").value, 10);
+
+      if (!amount || amount <= 0) {
+        alert("Skriv inn et gyldig budbeløp!");
+        return;
+      }
+
+      const result = await placeBid(listingId, amount);
+
+      if (result) {
+        alert("✅ Budet ditt er lagt inn!");
+        await loadListings(); // oppdaterer visningen
+      }
+    }
+  });
+
 });
